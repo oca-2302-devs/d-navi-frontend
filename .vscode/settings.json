@@ -1,0 +1,30 @@
+{
+  "editor.tabSize": 2,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "github.copilot.enable": {
+    "*": true,
+    "markdown": true,
+    "dotenv": false,
+    "env": false
+  },
+  "workbench.startupEditor": "none",
+  "cSpell.blockCheckingWhenAverageChunkSizeGreaterThan": 500,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "files.eol": "\n",
+  "typescript.suggest.autoImports": true,
+  "editor.suggest.preview": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "makefile.configureOnOpen": true
+}
