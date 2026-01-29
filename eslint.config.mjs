@@ -40,12 +40,18 @@ const eslintConfig = [
       "react-hooks": reactHooksPlugin,
       prettier: prettierPlugin,
     },
+    settings: {
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: "tsconfig.json",
+        },
+      },
+    },
     rules: {
-      // React rules
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
 
-      // TypeScript rules
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/no-explicit-any": ["error"],
       "@typescript-eslint/no-unused-vars": [
@@ -55,26 +61,9 @@ const eslintConfig = [
           varsIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/naming-convention": [
-        "error",
-        {
-          selector: "variable",
-          format: ["camelCase", "PascalCase"],
-        },
-        {
-          selector: "parameter",
-          format: ["camelCase"],
-        },
-        {
-          selector: "typeLike",
-          format: ["PascalCase"],
-        },
-      ],
 
-      // Prettier rules
       "prettier/prettier": "error",
 
-      // Import rules
       "import/no-unresolved": "error",
       "import/order": [
         "error",
@@ -92,7 +81,12 @@ const eslintConfig = [
               position: "before",
             },
             {
-              pattern: "@/service/**",
+              pattern: "@/features/**",
+              group: "internal",
+              position: "after",
+            },
+            {
+              pattern: "@/shared/**",
               group: "internal",
               position: "after",
             },
@@ -101,7 +95,6 @@ const eslintConfig = [
         },
       ],
 
-      // React Hooks rules
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
     },
