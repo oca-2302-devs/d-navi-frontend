@@ -17,7 +17,7 @@ export interface JoinRequestToastProps {
   id: string | number; // To dismiss the toast
 }
 
-export const JoinRequestToast = ({ onRequestHandle, id }: JoinRequestToastProps) => {
+export function JoinRequestToast({ onRequestHandle, id }: JoinRequestToastProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAction = async (approved: boolean) => {
@@ -66,4 +66,4 @@ export const JoinRequestToast = ({ onRequestHandle, id }: JoinRequestToastProps)
       </div>
     </div>
   );
-};
+}

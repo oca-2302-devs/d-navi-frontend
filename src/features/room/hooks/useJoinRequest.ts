@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import { JoinRequestToast, type JoinRequestToastProps } from "../components";
 
-export const useJoinRequest = () => {
+export function useJoinRequest() {
   const showJoinRequest = (onRequestHandle: JoinRequestToastProps["onRequestHandle"]) => {
     toast.custom(
       (id) =>
@@ -20,4 +20,4 @@ export const useJoinRequest = () => {
   };
 
   return { showJoinRequest };
-};
+}
