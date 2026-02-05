@@ -10,7 +10,9 @@ const TEXTS = {
   description: "新しい参加リクエストが届きました",
   approve: "承認",
   reject: "拒否",
-};
+  approvedMessage: "参加リクエストを承認しました",
+  rejectedMessage: "参加リクエストを拒否しました",
+} as const;
 
 export interface JoinRequestToastProps {
   onRequestHandle: (approved: boolean) => Promise<void> | void;
@@ -26,6 +28,7 @@ export function JoinRequestToast({ onRequestHandle, id }: JoinRequestToastProps)
     try {
       await onRequestHandle(approved);
       toast.dismiss(id);
+      toast.success(approved ? TEXTS.approvedMessage : TEXTS.rejectedMessage);
     } catch (error) {
       console.error("Failed to handle join request", error);
     } finally {
