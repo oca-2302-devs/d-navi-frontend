@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 
 import { AnimatePresence, motion } from "framer-motion";
 
+import { ONE_SECOND_MS } from "@/shared/constants/time";
 import { useAutoClose, useMounted } from "@/shared/hooks";
 
 type MatchingSuccessModalProps = {
@@ -11,7 +12,7 @@ type MatchingSuccessModalProps = {
   onClose: () => void;
 };
 
-const AUTO_CLOSE_DELAY_MS = 3000;
+const AUTO_CLOSE_DELAY_MS = 3 * ONE_SECOND_MS;
 
 export function MatchingSuccessModal({ open, onClose }: MatchingSuccessModalProps) {
   const mounted = useMounted();
