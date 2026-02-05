@@ -2,14 +2,11 @@
 
 import * as React from "react";
 
-import { clsx, type ClassValue } from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { Layers } from "lucide-react";
-import { twMerge } from "tailwind-merge";
 
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { FLOOR_NUMBERS } from "@/shared/constants/floors";
+import { cn } from "@/shared/lib/utils";
 
 interface FloorNavigationProps {
   currentLevel: number;
@@ -17,39 +14,39 @@ interface FloorNavigationProps {
   className?: string;
 }
 
+// Variants for the container expansion
+const containerVariants = {
+  closed: {
+    height: "auto",
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+    },
+  },
+  open: {
+    transition: {
+      staggerChildren: 0.07,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+// Variants for individual buttons
+const itemVariants = {
+  closed: { opacity: 0, scale: 0.3, y: 20 },
+  open: { opacity: 1, scale: 1, y: 0 },
+};
+
 export function FloorNavigation({ currentLevel, onLevelChange, className }: FloorNavigationProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   // Floors 6 to 1 (descending for visual stack)
-  const floors = [6, 5, 4, 3, 2, 1];
+  const floors = FLOOR_NUMBERS;
 
   const toggleOpen = () => setIsOpen((prev) => !prev);
 
-  // Variants for the container expansion
-  const containerVariants = {
-    closed: {
-      height: "auto",
-      transition: {
-        staggerChildren: 0.05,
-        staggerDirection: -1,
-      },
-    },
-    open: {
-      transition: {
-        staggerChildren: 0.07,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  // Variants for individual buttons
-  const itemVariants = {
-    closed: { opacity: 0, scale: 0.3, y: 20 },
-    open: { opacity: 1, scale: 1, y: 0 },
-  };
-
   return (
-    <div className={cn("flex flex-col items-center gap-2", className)}>
+    <div className={cn("fixed bottom-4 left-4 z-50 flex flex-col items-center gap-2", className)}>
       <AnimatePresence>
         {isOpen && (
           <motion.div
