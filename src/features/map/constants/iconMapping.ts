@@ -1,21 +1,12 @@
-import {
-  ArrowUpDown,
-  Footprints,
-  CircleParking,
-  DoorOpen,
-  Library,
-  type LucideIcon,
-} from "lucide-react";
+import elevatorIconUrl from "@/assets/ElevatorIcon.svg";
+import parkingIconUrl from "@/assets/ParkingIcon.svg";
+import stairsIconUrl from "@/assets/StairsIcon.svg";
 
 /**
- * Maps node types to their corresponding Lucide icons
+ * Maps node types to their corresponding SVG icon URLs
  */
-export const NODE_ICON_MAPPING: Record<string, LucideIcon> = {
-  elevator: ArrowUpDown,
-  stairs: Footprints, // 階段のメタファーとして足跡を使用
-  parking: CircleParking,
-  exit: DoorOpen,
-  library: Library,
+export const NODE_ICON_MAPPING: Record<string, string | { src: string }> = {
+  elevator: elevatorIconUrl,
+  stairs: stairsIconUrl,
+  parking: parkingIconUrl,
 };
-
-export type { LucideIcon };
