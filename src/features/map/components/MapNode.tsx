@@ -9,6 +9,8 @@ import { cn } from "@/shared/lib/utils";
 import { getNodeStyle } from "../lib/nodeStyles";
 import { Node } from "../types";
 
+import { MapNodeIcon } from "./MapNodeIcon";
+
 interface MapNodeProps {
   node: Node;
   onClick?: (node: Node) => void;
@@ -24,7 +26,6 @@ export function MapNode({ node, onClick, isActive, isDestination }: MapNodeProps
     const centerX = position.x + size.width / 2;
     const centerY = position.y + size.height / 2;
 
-    // アイコンを中央に配置（要求通り小さくリサイズ）
     const iconSize = 32;
     const x = centerX - iconSize / 2;
     const y = centerY - iconSize / 2;
@@ -72,6 +73,7 @@ export function MapNode({ node, onClick, isActive, isDestination }: MapNodeProps
         className={cn("stroke-1 transition-colors", isActive ? "stroke-rose-500 stroke-2" : "")}
         rx={4} // 角丸
       />
+      <MapNodeIcon node={node} isDestination={isDestination} />
     </motion.g>
   );
 }
