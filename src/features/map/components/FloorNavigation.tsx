@@ -43,7 +43,9 @@ export function FloorNavigation({ currentLevel, onLevelChange, className }: Floo
   // Floors 6 to 1 (descending for visual stack)
   const floors = FLOOR_NUMBERS;
 
-  const toggleOpen = () => setIsOpen((prev) => !prev);
+  function toggleOpen() {
+    setIsOpen((prev) => !prev);
+  }
 
   return (
     <div className={cn("fixed bottom-4 left-4 z-50 flex flex-col items-center gap-2", className)}>

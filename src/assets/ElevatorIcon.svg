@@ -1,0 +1,10 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="50" height="50" rx="5" fill="#1E88E5"/>
+<!-- Person -->
+<circle cx="18" cy="20" r="4" fill="white"/>
+<path d="M12 36V27C12 25.3431 13.3431 24 15 24H21C22.6569 24 24 25.3431 24 27V36" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- Up Arrow -->
+<path d="M36 16L41 22H31L36 16Z" fill="white"/>
+<!-- Down Arrow -->
+<path d="M36 36L31 30H41L36 36Z" fill="white"/>
+</svg>
