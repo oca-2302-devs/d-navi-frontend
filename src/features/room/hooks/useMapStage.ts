@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useRouter, useParams } from "next/navigation";
+
 // 表示段階を定義 (更新版)
 export enum DisplayStage {
   LOCATION_CONFIRMATION = "LOCATION_CONFIRMATION", // 現在地確定中 (スピナー)
@@ -17,6 +19,9 @@ export function useMapStage() {
     DisplayStage.LOCATION_CONFIRMATION
   );
   const [showMatchingModal, setShowMatchingModal] = useState(false);
+  const router = useRouter();
+  const params = useParams();
+  const roomId = params.roomId as string;
 
   // 段階的な画面遷移を制御
   useEffect(() => {
@@ -45,14 +50,14 @@ export function useMapStage() {
         break;
 
       case DisplayStage.ROUTE_WITH_CURRENT_LOCATION:
-        // 最終段階なので何もしない
+        router.replace(`/room/${roomId}/meet`);
         break;
     }
 
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [displayStage]);
+  }, [displayStage, router, roomId]);
 
   // MatchingSuccessModalが閉じられたときの処理
   const handleMatchingModalClose = () => {
