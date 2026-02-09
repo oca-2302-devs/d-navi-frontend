@@ -1,9 +1,8 @@
-import { useCallback } from "react";
+"use client";
 
 import { cn } from "@/shared/lib/utils";
 
 import { useMapNavigation } from "../hooks/useMapNavigation";
-import { Node } from "../types";
 
 import { ElevatorNotification } from "./ElevatorNotification";
 import { FloorMap } from "./FloorMap";
@@ -16,13 +15,13 @@ interface MapProps {
   // 実際のアプリでは、これらのpropsは親またはcontextから渡される可能性がある
 }
 
+/**
+ * マップコンポーネント
+ * マップの表示とナビゲーションコントロールを担当
+ */
 export function Map({ className, showRoute = true, showCurrentLocation = true }: MapProps) {
   const { currentLevel, setCurrentLevel, floorNodes, nextFloor, hostPath, guestPath } =
     useMapNavigation(showRoute);
-
-  const handleNodeClick = useCallback((node: Node) => {
-    console.log("Clicked node:", node);
-  }, []);
 
   return (
     <div className={cn("relative w-full h-[600px]", className)}>
@@ -32,7 +31,6 @@ export function Map({ className, showRoute = true, showCurrentLocation = true }:
         nodes={floorNodes}
         hostPath={showRoute ? hostPath : undefined}
         guestPath={showRoute ? guestPath : undefined}
-        onNodeClick={handleNodeClick}
         showCurrentLocation={showCurrentLocation}
         showRoute={showRoute}
       />

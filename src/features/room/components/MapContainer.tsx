@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
+
+import { useRouter, useParams } from "next/navigation";
+
 import { Map } from "@/features/map/components";
 
 import { useMapStage, DisplayStage } from "../hooks/useMapStage";
@@ -7,8 +11,23 @@ import { useMapStage, DisplayStage } from "../hooks/useMapStage";
 import { LocationConfirmationScreen } from "./LocationConfirmationScreen";
 import { MatchingSuccessModal } from "./MatchingSuccessModal";
 
+/**
+ * マップコンテナコンポーネント
+ * 表示段階の管理とルーティングを担当
+ */
 export function MapContainer() {
+  const router = useRouter();
+  const params = useParams();
+  const roomId = params.room_id as string;
+
   const { displayStage, showMatchingModal, handleMatchingModalClose } = useMapStage();
+
+  // ROUTE_WITH_CURRENT_LOCATION段階に到達したら/meetにルーティング
+  useEffect(() => {
+    if (displayStage === DisplayStage.ROUTE_WITH_CURRENT_LOCATION) {
+      router.replace(`/room/${roomId}/meet`);
+    }
+  }, [displayStage, router, roomId]);
 
   // 現在の段階に応じてコンポーネントを表示
   if (displayStage === DisplayStage.LOCATION_CONFIRMATION) {

@@ -1,48 +1,31 @@
 "use client";
 
 import { Copy, Check, Share2 } from "lucide-react";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/shared/components/ui/button";
-import { useClipboard, useMounted, useShare } from "@/shared/hooks";
 
-import {
-  INVITE_URL_TEXTS,
-  SHARE_MESSAGE_TEMPLATE,
-  COPY_RESET_DELAY,
-} from "../constants/inviteUrlTexts";
-import { generateInviteUrl } from "../lib/inviteUrlUtils";
+import { INVITE_URL_TEXTS } from "../constants/inviteUrlTexts";
+import { useInviteUrl } from "../hooks/useInviteUrl";
 
+/**
+ * 招待URLカードコンポーネント
+ * UIレンダリングと通知に専念し、ビジネスロジックはuseInviteUrlフックに委譲
+ */
 export function InviteUrlCard() {
-  const params = useParams<{ room_id: string }>();
-  const mounted = useMounted();
-  const { isCopied, copyToClipboard } = useClipboard(COPY_RESET_DELAY);
-  const { share } = useShare();
+  const { inviteUrl, isCopied, handleCopy, handleShare } = useInviteUrl();
 
-  const inviteUrl = mounted ? generateInviteUrl(params.room_id) : "";
-
-  const handleCopy = async () => {
-    const success = await copyToClipboard(inviteUrl);
-    if (success) {
-      toast.success(INVITE_URL_TEXTS.copySuccess);
-    } else {
-      toast.error(INVITE_URL_TEXTS.copyError);
-    }
+  const onCopyClick = async () => {
+    await handleCopy();
+    toast.success(INVITE_URL_TEXTS.copySuccess);
   };
 
-  const handleShare = async () => {
-    const shareText = SHARE_MESSAGE_TEMPLATE(inviteUrl);
-    const result = await share(shareText, INVITE_URL_TEXTS.title);
-
-    if (result.success) {
-      toast.success(INVITE_URL_TEXTS.shareSuccess);
-    } else if (!result.cancelled) {
-      toast.error(INVITE_URL_TEXTS.shareError);
-    }
+  const onShareClick = async () => {
+    await handleShare();
+    toast.success(INVITE_URL_TEXTS.shareSuccess);
   };
 
-  if (!mounted) {
+  if (!inviteUrl) {
     return null;
   }
 
@@ -61,7 +44,7 @@ export function InviteUrlCard() {
           <Button
             size="default"
             variant="default"
-            onClick={handleCopy}
+            onClick={onCopyClick}
             className="flex items-center gap-2 whitespace-nowrap bg-rose-500 hover:bg-rose-600"
             disabled={isCopied}
           >
@@ -81,7 +64,7 @@ export function InviteUrlCard() {
           <Button
             size="default"
             variant="default"
-            onClick={handleShare}
+            onClick={onShareClick}
             className="flex items-center justify-center w-9 h-9 p-0 bg-gray-500 hover:bg-gray-600"
             aria-label={INVITE_URL_TEXTS.shareButton}
           >
