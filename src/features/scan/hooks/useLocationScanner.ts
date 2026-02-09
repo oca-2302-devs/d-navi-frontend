@@ -26,11 +26,9 @@ export default function useLocationScanner(): UseLocationScannerReturn {
   const { saveLocation } = useLocationStorage();
 
   const onSuccess = useCallback(
-    (_results: IDetectedBarcode[]) => {
+    (results: IDetectedBarcode[]) => {
       try {
-        // TODO: 位置情報のハードコーディングは一時的な実装。本来はバックエンドから取得する。
-        const currentLocation = { floor: 1, x: 6, y: 6 };
-        saveLocation(currentLocation);
+        saveLocation(results[0].rawValue);
 
         toast.success("QRコードを正常にスキャンしました");
         router.push("/map");
