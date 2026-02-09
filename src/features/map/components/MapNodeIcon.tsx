@@ -1,5 +1,3 @@
-import React from "react";
-
 import destinationIconUrl from "@/assets/DestinationIcon.svg";
 import toiletIconUrl from "@/assets/ToiletIcon.svg";
 

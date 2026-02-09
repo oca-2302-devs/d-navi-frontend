@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -16,12 +16,7 @@ interface FloorMapProps {
   onNodeClick?: (node: Node) => void;
 }
 
-export function FloorMap({ floor, nodes, hostPath, guestPath, onNodeClick }: FloorMapProps) {
-  // 現在のフロアのノードをフィルタリング
-  const floorNodes = useMemo(() => {
-    return nodes.filter((node) => node.floor === floor);
-  }, [nodes, floor]);
-
+function FloorMapComponent({ floor, nodes, hostPath, guestPath, onNodeClick }: FloorMapProps) {
   const hostSegments = useMemo(
     () => getPathSegments(nodes, floor, hostPath),
     [nodes, floor, hostPath]
@@ -60,7 +55,7 @@ export function FloorMap({ floor, nodes, hostPath, guestPath, onNodeClick }: Flo
             ))}
 
             {/* ノード */}
-            {floorNodes.map((node) => {
+            {nodes.map((node) => {
               const isHostActive = hostPath?.path.includes(node.id);
               const isGuestActive = guestPath?.path.includes(node.id);
               // このノードがいずれかのパスの目的地かをチェック
@@ -81,9 +76,11 @@ export function FloorMap({ floor, nodes, hostPath, guestPath, onNodeClick }: Flo
       </AnimatePresence>
 
       {/* フロアラベルオーバーレイ */}
-      <div className="absolute top-4 right-4 text-4xl font-bold text-gray-200 dark:text-gray-800 pointer-events-none select-none">
+      <div className="absolute top-4 right-4 text-4xl font-bold text-gray-700 dark:text-gray-300 pointer-events-none select-none">
         {floor}F
       </div>
     </div>
   );
 }
+
+export const FloorMap = memo(FloorMapComponent);
