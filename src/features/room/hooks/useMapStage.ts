@@ -21,7 +21,7 @@ export function useMapStage() {
   const [showMatchingModal, setShowMatchingModal] = useState(false);
   const router = useRouter();
   const params = useParams();
-  const roomId = params.roomId as string;
+  const roomId = params.room_id as string;
 
   // 段階的な画面遷移を制御
   useEffect(() => {

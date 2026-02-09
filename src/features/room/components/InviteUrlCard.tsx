@@ -15,12 +15,12 @@ import {
 import { generateInviteUrl } from "../lib/inviteUrlUtils";
 
 export function InviteUrlCard() {
-  const params = useParams<{ roomId: string }>();
+  const params = useParams<{ room_id: string }>();
   const mounted = useMounted();
   const { isCopied, copyToClipboard } = useClipboard(COPY_RESET_DELAY);
   const { share } = useShare();
 
-  const inviteUrl = mounted ? generateInviteUrl(params.roomId) : "";
+  const inviteUrl = mounted ? generateInviteUrl(params.room_id) : "";
 
   const handleCopy = async () => {
     const success = await copyToClipboard(inviteUrl);
