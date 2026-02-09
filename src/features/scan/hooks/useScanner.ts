@@ -3,10 +3,6 @@
 import { useCallback, useState } from "react";
 
 import type { IDetectedBarcode } from "@yudiel/react-qr-scanner";
-import { toast } from "sonner";
-
-import { ONE_HOUR_MS } from "@/shared/constants";
-import { saveLocalStorage, STORAGE_KEYS } from "@/shared/lib/storage";
 
 export interface HandleScan {
   (results: IDetectedBarcode[]): void;
@@ -27,45 +23,24 @@ export interface UseScannerReturn {
   handleError: HandleError;
 }
 
+/**
+ * QRコードスキャンの基本機能を提供するフック
+ * 位置情報保存やトースト通知は呼び出し側の責務として分離
+ */
 export default function useScanner(options?: UseScannerProps): UseScannerReturn {
   const [isScanning, setIsScanning] = useState(true);
 
   const handleScan = useCallback(
     (results: IDetectedBarcode[]): void => {
-      if (results.length === 0) {
-        toast("有効なQRコードが見つかりませんでした");
+      if (results.length === 0 || !results[0].rawValue) {
         return;
       }
 
-      const { rawValue: value } = results[0];
-
-      if (!value) {
-        toast("QRコードの読み取りに失敗しました");
-        return;
-      }
-
-      try {
-        // TODO: 位置情報のハードコーディングは一時的な実装。本来はバックエンドから取得する。
-        const currentLocation = { floor: 1, x: 6, y: 6 };
-        const currentLocationString = JSON.stringify(currentLocation);
-
-        // LocalStorageにした理由は、現在地がクライアントに見えても問題ないため。
-        saveLocalStorage({
-          key: STORAGE_KEYS.LOCATION.CURRENT,
-          value: currentLocationString,
-          maxAge: ONE_HOUR_MS,
-        });
-      } catch {
-        toast("位置情報の取得に失敗しました");
-        return;
-      }
+      setIsScanning(false);
 
       if (options?.onSuccess) {
         options.onSuccess(results);
       }
-
-      setIsScanning(false);
-      toast.success("QRコードを正常にスキャンしました");
     },
     [options]
   );
@@ -79,8 +54,6 @@ export default function useScanner(options?: UseScannerProps): UseScannerReturn 
       if (options?.onError) {
         options.onError(err);
       }
-
-      toast("スキャン中にエラーが発生しました");
     },
     [options]
   );

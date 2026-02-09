@@ -1,9 +1,10 @@
 "use client";
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 
-import { MOCK_CURRENT_LOCATION } from "../constants";
+import { getLocalStorage, STORAGE_KEYS } from "@/shared/lib/storage";
+
 import { getPathSegments } from "../lib/pathUtils";
 import { Node, PathData } from "../types";
 
@@ -30,6 +31,7 @@ function FloorMapComponent({
   showCurrentLocation = true,
   showRoute = true,
 }: FloorMapProps) {
+  const [currentNode, setCurrentNode] = useState<Node | null>(null);
   const hostSegments = useMemo(
     () => getPathSegments(nodes, floor, hostPath),
     [nodes, floor, hostPath]
@@ -38,6 +40,17 @@ function FloorMapComponent({
     () => getPathSegments(nodes, floor, guestPath),
     [nodes, floor, guestPath]
   );
+
+  useEffect(() => {
+    const fetchCurrentNode = () => {
+      const currentNodeId = getLocalStorage({ key: STORAGE_KEYS.LOCATION.CURRENT });
+      const currentNode = nodes.find((node) => node.id === currentNodeId);
+
+      setCurrentNode(currentNode || null);
+    };
+
+    fetchCurrentNode();
+  }, [nodes]);
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-white/50 dark:bg-black/20 rounded-xl shadow-inner backdrop-blur-sm border border-gray-100 dark:border-gray-800">
@@ -88,8 +101,8 @@ function FloorMapComponent({
             })}
 
             {/* 現在地マーカー - showCurrentLocationがtrueの時のみ表示 */}
-            {showCurrentLocation && floor === MOCK_CURRENT_LOCATION.floor && (
-              <CurrentLocationMarker x={MOCK_CURRENT_LOCATION.x} y={MOCK_CURRENT_LOCATION.y} />
+            {showCurrentLocation && floor === currentNode?.floor && currentNode?.entry && (
+              <CurrentLocationMarker x={currentNode.entry.x} y={currentNode.entry.y} />
             )}
           </svg>
         </motion.div>
