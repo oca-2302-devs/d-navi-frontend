@@ -8,7 +8,7 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      {children}
+      <main className="mt-12">{children}</main>
     </>
   );
 }
