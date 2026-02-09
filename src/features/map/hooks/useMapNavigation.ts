@@ -2,11 +2,16 @@
 
 import { useMemo, useState } from "react";
 
-import { MOCK_NODES, MOCK_EDGE_DATA } from "../constants";
+import { MOCK_EDGE_DATA } from "../constants";
 import { getNextFloor } from "../lib/pathUtils";
+
+import { useNodes } from "./useNodes";
 
 export function useMapNavigation(showRoute: boolean = true) {
   const [currentLevel, setCurrentLevel] = useState<number>(1);
+
+  // Fetch nodes from AppSync
+  const { nodes, loading, error } = useNodes();
 
   // デモ用、ホスト/ゲストパスの切り替えまたはパスなし
   // サンプル通り、今はハードコード
@@ -15,20 +20,20 @@ export function useMapNavigation(showRoute: boolean = true) {
 
   // 現在のフロアのノードをフィルタリング
   const floorNodes = useMemo(() => {
-    return MOCK_NODES.filter((node) => node.floor === currentLevel);
-  }, [currentLevel]);
+    return nodes.filter((node) => node.floor === currentLevel);
+  }, [nodes, currentLevel]);
 
   // 次のフロアへの移動があるかチェック
   const nextFloor = useMemo(() => {
     if (!showRoute) return null;
 
     // ホストまたはゲストのパスから次のフロアを検索
-    const hostNext = getNextFloor(MOCK_NODES, currentLevel, hostPath);
+    const hostNext = getNextFloor(nodes, currentLevel, hostPath);
     if (hostNext) return hostNext;
 
-    const guestNext = getNextFloor(MOCK_NODES, currentLevel, guestPath);
+    const guestNext = getNextFloor(nodes, currentLevel, guestPath);
     return guestNext;
-  }, [currentLevel, showRoute, hostPath, guestPath]);
+  }, [nodes, currentLevel, showRoute, hostPath, guestPath]);
 
   return {
     currentLevel,
@@ -37,5 +42,7 @@ export function useMapNavigation(showRoute: boolean = true) {
     nextFloor,
     hostPath,
     guestPath,
+    loading,
+    error,
   };
 }

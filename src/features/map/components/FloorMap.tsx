@@ -84,8 +84,8 @@ function FloorMapComponent({
 
             {/* ノード */}
             {nodes.map((node) => {
-              const isHostActive = hostPath?.path.includes(node.id);
-              const isGuestActive = guestPath?.path.includes(node.id);
+              const isHostActive = hostPath?.path?.includes(node.id);
+              const isGuestActive = guestPath?.path?.includes(node.id);
               // このノードがいずれかのパスの目的地かをチェック
               const isDestination = hostPath?.end === node.id || guestPath?.end === node.id;
 
