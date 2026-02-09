@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ConfigureAmplify from "@/shared/components/ConfigureAmplify";
 import { Toaster } from "@/shared/components/ui/sonner";
+
 import Providers from "./providers";
 
 const geistSans = Geist({

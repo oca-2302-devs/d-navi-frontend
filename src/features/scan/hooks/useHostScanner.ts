@@ -1,12 +1,14 @@
 "use client";
 
+import { IDetectedBarcode } from "@yudiel/react-qr-scanner";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { IDetectedBarcode } from "@yudiel/react-qr-scanner";
 
 import { useCreateRoom } from "@/features/room/api/useCreateRoom";
+
 import { ONE_HOUR_MS } from "@/shared/constants";
 import { saveLocalStorage, STORAGE_KEYS } from "@/shared/lib/storage";
+
 import useScanner from "./useScanner";
 import type { HandleError, HandleScan } from "./useScanner";
 

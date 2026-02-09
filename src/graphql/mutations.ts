@@ -1,4 +1,3 @@
-/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
 export const createRoom = /* GraphQL */ `
@@ -49,5 +48,15 @@ export const rejectJoin = /* GraphQL */ `
 export const addDummyData = /* GraphQL */ `
   mutation AddDummyData {
     addDummyData
+  }
+`;
+
+export const updateMap = /* GraphQL */ `
+  mutation UpdateMap($input: UpdateMapInput!) {
+    updateMap(input: $input) {
+      PK
+      SK
+      data
+    }
   }
 `;

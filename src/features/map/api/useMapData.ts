@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import client from "@/lib/amplify";
+
 import { listMaps } from "@/graphql/queries";
+import client from "@/lib/amplify";
 
 export function useMapData() {
   return useQuery({

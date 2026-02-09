@@ -1,11 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import client from "@/lib/amplify";
+
 import { updateMap } from "@/graphql/mutations";
+import client from "@/lib/amplify";
 
 export function useUpdateMap() {
   const queryClient = useQueryClient();
 
   return useMutation({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mutationFn: async (input: any) => {
       const response = await client.graphql({
         query: updateMap,
