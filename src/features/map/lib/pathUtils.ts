@@ -4,10 +4,6 @@ import { Node, PathData, Position } from "../types";
  * パスデータに基づいて、指定されたフロアのパスセグメントを計算する
  * 異なるフロアを横断する際にパスをセグメントに分割する
  */
-/**
- * パスデータに基づいて、指定されたフロアのパスセグメントを計算する
- * 異なるフロアを横断する際にパスをセグメントに分割する
- */
 export function getPathSegments(nodes: Node[], floor: number, pathData?: PathData): Position[][] {
   if (!pathData?.path || pathData.path.length < 2) return [];
 
