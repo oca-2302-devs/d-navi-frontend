@@ -4,55 +4,50 @@ import { Node, PathData, Position } from "../types";
  * パスデータに基づいて、指定されたフロアのパスセグメントを計算する
  * 異なるフロアを横断する際にパスをセグメントに分割する
  */
+/**
+ * パスデータに基づいて、指定されたフロアのパスセグメントを計算する
+ * 異なるフロアを横断する際にパスをセグメントに分割する
+ */
 export function getPathSegments(nodes: Node[], floor: number, pathData?: PathData): Position[][] {
-  if (!pathData || !pathData.path || pathData.path.length < 2) return [];
+  if (!pathData?.path || pathData.path.length < 2) return [];
 
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
   const segments: Position[][] = [];
   let currentSegment: Position[] = [];
 
-  for (let i = 0; i < pathData.path.length; i++) {
-    const nodeId = pathData.path[i];
+  pathData.path.forEach((nodeId, index) => {
     const node = nodeMap.get(nodeId);
+    const isNodeOnFloor = node?.floor === floor;
 
-    if (node && node.floor === floor) {
-      // ノードはこのフロアにある
-      // 現在のセグメントに追加
-      const center = node.entry
-        ? node.entry
-        : {
-            x: node.position.x + node.size.width / 2,
-            y: node.position.y + node.size.height / 2,
-          };
+    if (isNodeOnFloor && node) {
+      // ノードはこのフロアにあるので座標を取得
+      const center = node.entry ?? {
+        x: node.position.x + node.size.width / 2,
+        y: node.position.y + node.size.height / 2,
+      };
 
-      // パスの前のノードもこのフロアにあったか、新しいセグメントを開始するかをチェック
-      if (i > 0) {
-        const prevNodeId = pathData.path[i - 1];
-        const prevNode = nodeMap.get(prevNodeId);
-        if (prevNode && prevNode.floor !== floor) {
-          // 前のノードは別のフロアにあった。新しいセグメントの開始（このフロアへの到着）
-          if (currentSegment.length > 0) {
-            segments.push(currentSegment);
-          }
-          currentSegment = [center];
-        } else {
-          // 前のノードはこのフロアにあった（またはi=0で以下で処理される）
-          currentSegment.push(center);
+      // 前のノードが別のフロアだった場合、新しいセグメントを開始
+      const prevNodeId = index > 0 ? pathData.path[index - 1] : null;
+      const prevNode = prevNodeId ? nodeMap.get(prevNodeId) : null;
+      const isPrevNodeOnDifferentFloor = prevNode && prevNode.floor !== floor;
+
+      if (isPrevNodeOnDifferentFloor) {
+        if (currentSegment.length > 0) {
+          segments.push(currentSegment);
         }
+        currentSegment = [center];
       } else {
-        // パスの最初のノード
         currentSegment.push(center);
       }
     } else {
-      // ノードはこのフロアにない
-      // アクティブなセグメントがあれば閉じる
+      // ノードはこのフロアにない、現在のセグメント終了
       if (currentSegment.length > 0) {
         segments.push(currentSegment);
         currentSegment = [];
       }
     }
-  }
-  // 残りを追加
+  });
+
   if (currentSegment.length > 0) {
     segments.push(currentSegment);
   }
@@ -69,4 +64,37 @@ export function buildSvgPath(path: Position[]): string {
   return path.reduce((acc, point, index) => {
     return index === 0 ? `M ${point.x} ${point.y}` : `${acc} L ${point.x} ${point.y}`;
   }, "");
+}
+
+/**
+ * 現在のフロアから次のフロアへの移動がある場合、その階数を返す
+ * エレベーターなどでフロア移動が発生する直前のノードにいる場合を検出する
+ */
+export function getNextFloor(
+  nodes: Node[],
+  currentFloor: number,
+  pathData?: PathData
+): number | null {
+  if (!pathData || !pathData.path || pathData.path.length < 2) return null;
+
+  const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+
+  // パスを走査して、現在のフロアから別のフロアへの遷移（departure）を探す
+  for (let i = 0; i < pathData.path.length - 1; i++) {
+    const nodeId = pathData.path[i];
+    const node = nodeMap.get(nodeId);
+
+    // 現在のノードがこのフロアにあるかチェック
+    if (node && node.floor === currentFloor) {
+      const nextNodeId = pathData.path[i + 1];
+      const nextNode = nodeMap.get(nextNodeId);
+
+      // 次のノードが別のフロアにある場合、遷移とみなす
+      if (nextNode && nextNode.floor !== currentFloor) {
+        return nextNode.floor;
+      }
+    }
+  }
+
+  return null;
 }

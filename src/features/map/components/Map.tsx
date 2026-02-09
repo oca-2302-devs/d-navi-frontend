@@ -1,30 +1,24 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 
 import { cn } from "@/shared/lib/utils";
 
-import { MOCK_NODES, MOCK_EDGE_DATA } from "../constants";
+import { useMapNavigation } from "../hooks/useMapNavigation";
 import { Node } from "../types";
 
+import { ElevatorNotification } from "./ElevatorNotification";
 import { FloorMap } from "./FloorMap";
 import { FloorNavigation } from "./FloorNavigation";
 
 interface MapProps {
   className?: string;
+  showRoute?: boolean; // ルートを表示するかどうか
+  showCurrentLocation?: boolean; // 現在地を表示するかどうか
   // 実際のアプリでは、これらのpropsは親またはcontextから渡される可能性がある
 }
 
-export function Map({ className }: MapProps) {
-  const [currentLevel, setCurrentLevel] = useState<number>(1);
-
-  // デモ用、ホスト/ゲストパスの切り替えまたはパスなし
-  // サンプル通り、今はハードコード
-  const hostPath = MOCK_EDGE_DATA.host;
-  const guestPath = MOCK_EDGE_DATA.guest;
-
-  // 現在のフロアのノードをフィルタリング
-  const floorNodes = useMemo(() => {
-    return MOCK_NODES.filter((node) => node.floor === currentLevel);
-  }, [currentLevel]);
+export function Map({ className, showRoute = true, showCurrentLocation = true }: MapProps) {
+  const { currentLevel, setCurrentLevel, floorNodes, nextFloor, hostPath, guestPath } =
+    useMapNavigation(showRoute);
 
   const handleNodeClick = useCallback((node: Node) => {
     console.log("Clicked node:", node);
@@ -36,13 +30,18 @@ export function Map({ className }: MapProps) {
       <FloorMap
         floor={currentLevel}
         nodes={floorNodes}
-        hostPath={hostPath}
-        guestPath={guestPath}
+        hostPath={showRoute ? hostPath : undefined}
+        guestPath={showRoute ? guestPath : undefined}
         onNodeClick={handleNodeClick}
+        showCurrentLocation={showCurrentLocation}
+        showRoute={showRoute}
       />
 
       {/* ナビゲーションコントロール */}
       <FloorNavigation currentLevel={currentLevel} onLevelChange={setCurrentLevel} />
+
+      {/* エレベーター案内通知 */}
+      <ElevatorNotification nextFloor={nextFloor} />
     </div>
   );
 }
