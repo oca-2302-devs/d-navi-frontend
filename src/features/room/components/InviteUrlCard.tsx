@@ -1,80 +1,44 @@
 "use client";
 
-import { useState } from "react";
-
 import { Copy, Check, Share2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/shared/components/ui/button";
-import { useMounted } from "@/shared/hooks";
+import { useClipboard, useMounted, useShare } from "@/shared/hooks";
 
-const TEXTS = {
-  title: "招待URL",
-  copyButton: "コピー",
-  copiedButton: "コピー完了",
-  copySuccess: "URLをコピーしました",
-  copyError: "コピーに失敗しました",
-  shareButton: "共有",
-  shareSuccess: "共有しました",
-  shareError: "共有に失敗しました",
-} as const;
+import {
+  INVITE_URL_TEXTS,
+  SHARE_MESSAGE_TEMPLATE,
+  COPY_RESET_DELAY,
+} from "../constants/inviteUrlTexts";
+import { generateInviteUrl } from "../lib/inviteUrlUtils";
 
 export function InviteUrlCard() {
   const params = useParams<{ roomId: string }>();
   const mounted = useMounted();
-  const [isCopied, setIsCopied] = useState(false);
+  const { isCopied, copyToClipboard } = useClipboard(COPY_RESET_DELAY);
+  const { share } = useShare();
 
-  // SSR対応: window.location.originはクライアントサイドでのみ利用可能
-  const inviteUrl = mounted ? `${window.location.origin}/scan/guest?roomId=${params.roomId}` : "";
+  const inviteUrl = mounted ? generateInviteUrl(params.roomId) : "";
 
   const handleCopy = async () => {
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(inviteUrl);
-      } else {
-        const textarea = document.createElement("textarea");
-        textarea.value = inviteUrl;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
-      }
-      setIsCopied(true);
-      toast.success(TEXTS.copySuccess);
-
-      // 2秒後にコピー状態をリセット
-      setTimeout(() => {
-        setIsCopied(false);
-      }, 2000);
-    } catch (error) {
-      toast.error(TEXTS.copyError);
-      console.error("Failed to copy URL:", error);
+    const success = await copyToClipboard(inviteUrl);
+    if (success) {
+      toast.success(INVITE_URL_TEXTS.copySuccess);
+    } else {
+      toast.error(INVITE_URL_TEXTS.copyError);
     }
   };
 
   const handleShare = async () => {
-    const shareText = `一緒にナビゲーションしましょう！\n${inviteUrl}`;
+    const shareText = SHARE_MESSAGE_TEMPLATE(inviteUrl);
+    const result = await share(shareText, INVITE_URL_TEXTS.title);
 
-    try {
-      // Web Share APIが利用可能な場合
-      if (navigator.share) {
-        await navigator.share({
-          title: "招待URL",
-          text: shareText,
-        });
-        toast.success(TEXTS.shareSuccess);
-      } else {
-        // Web Share APIが利用できない場合はLINEに直接共有
-        const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(shareText)}`;
-        window.open(lineUrl, "_blank");
-      }
-    } catch (error) {
-      // ユーザーがキャンセルした場合はエラーを表示しない
-      if ((error as Error).name !== "AbortError") {
-        toast.error(TEXTS.shareError);
-        console.error("Failed to share URL:", error);
-      }
+    if (result.success) {
+      toast.success(INVITE_URL_TEXTS.shareSuccess);
+    } else if (!result.cancelled) {
+      toast.error(INVITE_URL_TEXTS.shareError);
     }
   };
 
@@ -104,12 +68,12 @@ export function InviteUrlCard() {
             {isCopied ? (
               <>
                 <Check className="h-4 w-4" />
-                {TEXTS.copiedButton}
+                {INVITE_URL_TEXTS.copiedButton}
               </>
             ) : (
               <>
                 <Copy className="h-4 w-4" />
-                {TEXTS.copyButton}
+                {INVITE_URL_TEXTS.copyButton}
               </>
             )}
           </Button>
@@ -119,12 +83,13 @@ export function InviteUrlCard() {
             variant="default"
             onClick={handleShare}
             className="flex items-center justify-center w-9 h-9 p-0 bg-gray-500 hover:bg-gray-600"
+            aria-label={INVITE_URL_TEXTS.shareButton}
           >
             <Share2 className="h-4 w-4" />
           </Button>
         </div>
 
-        <p className="text-xs text-gray-500">このURLをゲストに共有して、ルームに招待できます</p>
+        <p className="text-xs text-gray-500">{INVITE_URL_TEXTS.description}</p>
       </div>
     </div>
   );
