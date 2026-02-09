@@ -6,6 +6,7 @@ export interface PathData {
   end: string;
   path: string[];
   cost: number;
+  arrivalTime: string;
 }
 
 /**

@@ -1,10 +1,13 @@
+"use client";
 import { memo, useMemo } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 
+import { MOCK_CURRENT_LOCATION } from "../constants";
 import { getPathSegments } from "../lib/pathUtils";
 import { Node, PathData } from "../types";
 
+import { CurrentLocationMarker } from "./CurrentLocationMarker";
 import { MapEdge } from "./MapEdge";
 import { MapNode } from "./MapNode";
 
@@ -14,9 +17,19 @@ interface FloorMapProps {
   hostPath?: PathData;
   guestPath?: PathData;
   onNodeClick?: (node: Node) => void;
+  showCurrentLocation?: boolean;
+  showRoute?: boolean;
 }
 
-function FloorMapComponent({ floor, nodes, hostPath, guestPath, onNodeClick }: FloorMapProps) {
+function FloorMapComponent({
+  floor,
+  nodes,
+  hostPath,
+  guestPath,
+  onNodeClick,
+  showCurrentLocation = true,
+  showRoute = true,
+}: FloorMapProps) {
   const hostSegments = useMemo(
     () => getPathSegments(nodes, floor, hostPath),
     [nodes, floor, hostPath]
@@ -44,15 +57,17 @@ function FloorMapComponent({ floor, nodes, hostPath, guestPath, onNodeClick }: F
           <svg viewBox="0 0 800 600" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
             {/* ノードを先に描画するかエッジを先に描画するか？通常はエッジをノードの下に描画 */}
 
-            {/* ゲストパス（青） */}
-            {guestSegments.map((segment, idx) => (
-              <MapEdge key={`guest-edge-${idx}`} path={segment} color="#3b82f6" />
-            ))}
+            {/* ゲストパス（青） - showRouteがtrueの時のみ表示 */}
+            {showRoute &&
+              guestSegments.map((segment, idx) => (
+                <MapEdge key={`guest-edge-${idx}`} path={segment} color="#3b82f6" />
+              ))}
 
-            {/* ホストパス（ローズ/デフォルト） */}
-            {hostSegments.map((segment, idx) => (
-              <MapEdge key={`host-edge-${idx}`} path={segment} color="#f43f5e" />
-            ))}
+            {/* ホストパス（ローズ/デフォルト） - showRouteがtrueの時のみ表示 */}
+            {showRoute &&
+              hostSegments.map((segment, idx) => (
+                <MapEdge key={`host-edge-${idx}`} path={segment} color="#f43f5e" />
+              ))}
 
             {/* ノード */}
             {nodes.map((node) => {
@@ -71,6 +86,11 @@ function FloorMapComponent({ floor, nodes, hostPath, guestPath, onNodeClick }: F
                 />
               );
             })}
+
+            {/* 現在地マーカー - showCurrentLocationがtrueの時のみ表示 */}
+            {showCurrentLocation && floor === MOCK_CURRENT_LOCATION.floor && (
+              <CurrentLocationMarker x={MOCK_CURRENT_LOCATION.x} y={MOCK_CURRENT_LOCATION.y} />
+            )}
           </svg>
         </motion.div>
       </AnimatePresence>
