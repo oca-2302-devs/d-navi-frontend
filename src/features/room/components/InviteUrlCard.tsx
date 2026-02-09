@@ -30,7 +30,16 @@ export function InviteUrlCard() {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(inviteUrl);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(inviteUrl);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = inviteUrl;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
       setIsCopied(true);
       toast.success(TEXTS.copySuccess);
 
@@ -90,6 +99,7 @@ export function InviteUrlCard() {
             variant="default"
             onClick={handleCopy}
             className="flex items-center gap-2 whitespace-nowrap bg-rose-500 hover:bg-rose-600"
+            disabled={isCopied}
           >
             {isCopied ? (
               <>
