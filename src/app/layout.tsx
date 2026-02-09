@@ -5,6 +5,8 @@ import "./globals.css";
 import ConfigureAmplify from "@/shared/components/ConfigureAmplify";
 import { Toaster } from "@/shared/components/ui/sonner";
 
+import Providers from "./providers";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,9 +33,11 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ConfigureAmplify />
-        {children}
-        <Toaster />
+        <Providers>
+          <ConfigureAmplify />
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
