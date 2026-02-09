@@ -1,0 +1,8 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="50" height="50" rx="5" fill="#FFA726"/>
+<!-- Stairs -->
+<path d="M12 36H20V28H28V20H36V12" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- Person walking up -->
+<circle cx="16" cy="16" r="3" fill="white"/>
+<path d="M14 28V23C14 21.8954 14.8954 21 16 21H18C19.1046 21 20 21.8954 20 23V28" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
