@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "@/shared/components/ui/button";
 
-export default function CreateRoomButton() {
+export function CreateRoomButton() {
   const router = useRouter();
 
   const handleCreateRoom = () => {
@@ -16,7 +16,7 @@ export default function CreateRoomButton() {
   return (
     <Button
       onClick={handleCreateRoom}
-      className="h-[42px] w-full max-w-[265px] rounded-[12px] border-2 border-white bg-rose-500 text-[20px] font-normal text-white hover:bg-rose-500 hover:opacity-90"
+      className="h-10.5 w-full max-w-66.25 rounded-2xl border-2 border-white bg-rose-500 text-[20px] font-normal text-white hover:bg-rose-500 hover:opacity-90"
     >
       ルーム作成
     </Button>

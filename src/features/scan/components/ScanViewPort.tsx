@@ -10,7 +10,7 @@ interface ScanViewPortProps {
   handleError: HandleError;
 }
 
-export default function ScanViewPort({ handleScan, handleError }: ScanViewPortProps) {
+export function ScanViewPort({ handleScan, handleError }: ScanViewPortProps) {
   return (
     <motion.div
       initial={{ scale: 0.9, opacity: 0 }}

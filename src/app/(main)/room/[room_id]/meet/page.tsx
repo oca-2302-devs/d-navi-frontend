@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import RouteGuidanceContainer from "@/features/map/components/RouteGuidanceContainer";
+import { RouteGuidanceContainer } from "@/features/map/components/RouteGuidanceContainer";
 
 export const metadata: Metadata = {
   title: "ナビ案内",

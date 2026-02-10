@@ -21,7 +21,7 @@ export default function Home() {
           {/* Get Current Location Button */}
           <Button
             asChild
-            className="h-[42px] w-full max-w-[265px] rounded-[12px] border-2 border-white bg-[#ff4064] text-[20px] font-normal text-white hover:bg-[#ff4064] hover:opacity-90"
+            className="h-10.5 w-full max-w-66.25 rounded-2xl border-2 border-white bg-[#ff4064] text-[20px] font-normal text-white hover:bg-[#ff4064] hover:opacity-90"
           >
             <Link href="/scan/location">現在地取得</Link>
           </Button>
@@ -29,7 +29,7 @@ export default function Home() {
           {/* Create Room Button */}
           <Button
             asChild
-            className="h-[42px] w-full max-w-[265px] rounded-[12px] border-2 border-white bg-[#ff4064] text-[20px] font-normal text-white hover:bg-[#ff4064] hover:opacity-90"
+            className="h-10.5 w-full max-w-66.25 rounded-2xl border-2 border-white bg-[#ff4064] text-[20px] font-normal text-white hover:bg-[#ff4064] hover:opacity-90"
           >
             <Link href="/scan/host">room作成</Link>
           </Button>

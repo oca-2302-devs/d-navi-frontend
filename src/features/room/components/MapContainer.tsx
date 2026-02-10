@@ -17,8 +17,8 @@ import { MatchingSuccessModal } from "./MatchingSuccessModal";
  */
 export function MapContainer() {
   const router = useRouter();
-  const params = useParams();
-  const roomId = params.room_id as string;
+  const params = useParams<{ room_id: string }>();
+  const roomId = params.room_id;
 
   const { displayStage, showMatchingModal, handleMatchingModalClose } = useMapStage();
 

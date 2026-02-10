@@ -1,11 +1,13 @@
 import React from "react";
 
+import { NodeType } from "../types";
+
 /**
  * ノードタイプに基づいてマップノードのスタイル設定を取得する
  * @param type - ノードのタイプ (elevator, stairs, room など)
  * @returns fill と stroke プロパティを含むスタイルオブジェクト
  */
-export function getNodeStyle(type: string): React.CSSProperties {
+export function getNodeStyle(type: NodeType): React.CSSProperties {
   switch (type) {
     case "elevator":
       return { fill: "#bfdbfe" }; // blue-200

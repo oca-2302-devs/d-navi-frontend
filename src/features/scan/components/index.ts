@@ -1,5 +1,5 @@
-export { default as HostScanContainer } from "./HostScanContainer";
-export { default as GuestScanContainer } from "./GuestScanContainer";
-export { default as LocationScanContainer } from "./LocationScanContainer";
-export { default as RescanQRButton } from "./RescanQRButton";
-export { default as CreateRoomButton } from "./CreateRoomButton";
+export { HostScanContainer } from "./HostScanContainer";
+export { GuestScanContainer } from "./GuestScanContainer";
+export { LocationScanContainer } from "./LocationScanContainer";
+export { RescanQRButton } from "./RescanQRButton";
+export { CreateRoomButton } from "./CreateRoomButton";

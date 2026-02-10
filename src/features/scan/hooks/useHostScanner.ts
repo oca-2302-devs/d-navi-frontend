@@ -9,7 +9,7 @@ import { useCreateRoom } from "@/features/room/api/useCreateRoom";
 import { ONE_HOUR_MS } from "@/shared/constants";
 import { saveLocalStorage, STORAGE_KEYS } from "@/shared/lib/storage";
 
-import useScanner from "./useScanner";
+import { useScanner } from "./useScanner";
 import type { HandleError, HandleScan } from "./useScanner";
 
 export interface UseHostScannerReturn {
@@ -18,7 +18,7 @@ export interface UseHostScannerReturn {
   handleHostError: HandleError;
 }
 
-export default function useHostScanner(): UseHostScannerReturn {
+export function useHostScanner(): UseHostScannerReturn {
   const router = useRouter();
   const { mutateAsync: createRoomAsync } = useCreateRoom();
 

@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 
-import ScanBackButton from "@/features/scan/components/ScanBackButton";
-import ScanHeader from "@/features/scan/components/ScanHeader";
-import ScanStatus from "@/features/scan/components/ScanStatus";
-import ScanViewPort from "@/features/scan/components/ScanViewPort";
+import { ScanBackButton } from "@/features/scan/components/ScanBackButton";
+import { ScanHeader } from "@/features/scan/components/ScanHeader";
+import { ScanStatus } from "@/features/scan/components/ScanStatus";
+import { ScanViewPort } from "@/features/scan/components/ScanViewPort";
 
 import { HandleError, HandleScan } from "../hooks/useScanner";
 
@@ -15,7 +15,7 @@ interface ScanLayoutProps {
   handleError: HandleError;
 }
 
-export default function ScanLayout({ isScanning, handleScan, handleError }: ScanLayoutProps) {
+export function ScanLayout({ isScanning, handleScan, handleError }: ScanLayoutProps) {
   return (
     <div className="min-h-screen w-full bg-rose-300 flex flex-col items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
       <ScanBackButton />

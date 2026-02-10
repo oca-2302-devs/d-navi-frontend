@@ -1,10 +1,10 @@
 "use client";
 
-import { Amplify, type ResourcesConfig } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 
-import config from "../../aws-exports";
+import outputs from "../../../amplify_outputs.json";
 
-Amplify.configure(config as ResourcesConfig);
+Amplify.configure(outputs);
 
 export default function ConfigureAmplify() {
   return null;

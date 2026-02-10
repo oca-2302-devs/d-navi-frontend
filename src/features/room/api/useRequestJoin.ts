@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { requestJoin } from "@/graphql/mutations";
 import client from "@/lib/amplify";
 
 interface useRequestJoinVariables {
@@ -11,12 +10,23 @@ interface useRequestJoinVariables {
 export function useRequestJoin() {
   return useMutation({
     mutationFn: async ({ roomId, guestNodeID }: useRequestJoinVariables) => {
-      const response = await client.graphql({
-        query: requestJoin,
-        variables: { roomId, guestNodeID },
+      const createdAt = new Date().toISOString();
+
+      const { errors } = await client.models.SingleTable.create({
+        PK: `ROOM#${roomId}`,
+        SK: `REQUEST#${guestNodeID}`,
+        entity: "REQUEST",
+        status: "PENDING",
+        createdAt,
+        updatedAt: createdAt,
+        expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
       });
-      // @ts-ignore - response type is not fully typed without codegen
-      return response.data.createRoom;
+
+      if (errors) {
+        throw new Error(`Failed to request join: ${JSON.stringify(errors)}`);
+      }
+
+      return { ok: true, status: "PENDING" };
     },
   });
 }

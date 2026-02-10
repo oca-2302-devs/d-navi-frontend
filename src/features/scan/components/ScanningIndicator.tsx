@@ -7,7 +7,7 @@ interface ScanningIndicatorProps {
   isScanning: boolean;
 }
 
-export default function ScanningIndicator({ isScanning }: ScanningIndicatorProps) {
+export function ScanningIndicator({ isScanning }: ScanningIndicatorProps) {
   return (
     <motion.div
       animate={{ rotate: isScanning ? 360 : 0 }}

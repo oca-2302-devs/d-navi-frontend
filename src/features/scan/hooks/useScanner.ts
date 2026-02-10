@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import type { IDetectedBarcode } from "@yudiel/react-qr-scanner";
 
@@ -27,36 +27,29 @@ export interface UseScannerReturn {
  * QRコードスキャンの基本機能を提供するフック
  * 位置情報保存やトースト通知は呼び出し側の責務として分離
  */
-export default function useScanner(options?: UseScannerProps): UseScannerReturn {
+export function useScanner(options?: UseScannerProps): UseScannerReturn {
   const [isScanning, setIsScanning] = useState(true);
+  // コールバックを ref で保持して useCallback の依存配列を安定化
+  const onSuccessRef = useRef(options?.onSuccess);
+  const onErrorRef = useRef(options?.onError);
+  onSuccessRef.current = options?.onSuccess;
+  onErrorRef.current = options?.onError;
 
-  const handleScan = useCallback(
-    (results: IDetectedBarcode[]): void => {
-      if (results.length === 0 || !results[0].rawValue) {
-        return;
-      }
+  const handleScan = useCallback((results: IDetectedBarcode[]): void => {
+    if (results.length === 0 || !results[0].rawValue) {
+      return;
+    }
 
-      setIsScanning(false);
+    setIsScanning(false);
+    onSuccessRef.current?.(results);
+  }, []);
 
-      if (options?.onSuccess) {
-        options.onSuccess(results);
-      }
-    },
-    [options]
-  );
-
-  const handleError = useCallback(
-    (err: unknown) => {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Scanner Error:", err);
-      }
-
-      if (options?.onError) {
-        options.onError(err);
-      }
-    },
-    [options]
-  );
+  const handleError = useCallback((err: unknown) => {
+    if (process.env.NODE_ENV === "development") {
+      console.error("Scanner Error:", err);
+    }
+    onErrorRef.current?.(err);
+  }, []);
 
   return { isScanning, handleScan, handleError };
 }
