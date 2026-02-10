@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 import { useLocationStorage } from "./useLocationStorage";
 import type { HandleError, HandleScan } from "./useScanner";
-import useScanner from "./useScanner";
+import { useScanner } from "./useScanner";
 
 export interface UseLocationScannerReturn {
   isScanning: boolean;
@@ -21,7 +21,7 @@ export interface UseLocationScannerReturn {
  * useScanner（スキャン）とuseLocationStorage（保存）を組み合わせて、
  * 位置情報スキャンのワークフロー全体を調整する
  */
-export default function useLocationScanner(): UseLocationScannerReturn {
+export function useLocationScanner(): UseLocationScannerReturn {
   const router = useRouter();
   const { saveLocation } = useLocationStorage();
 

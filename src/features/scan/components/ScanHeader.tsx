@@ -1,12 +1,12 @@
 "use client";
 
-import ScanningIndicator from "./ScanningIndicator";
+import { ScanningIndicator } from "./ScanningIndicator";
 
 interface ScanHeaderProps {
   isScanning: boolean;
 }
 
-export default function ScanHeader({ isScanning }: ScanHeaderProps) {
+export function ScanHeader({ isScanning }: ScanHeaderProps) {
   return (
     <div className="text-center shrink-0 pt-4 sm:pt-0">
       <ScanningIndicator isScanning={isScanning} />

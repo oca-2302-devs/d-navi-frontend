@@ -324,8 +324,8 @@ async function estimateTimeWithBedrock(input: BedrockInput): Promise<BedrockTime
 
   // Prefillで '{' を入力済みなので、モデルの回答はそれ以降の文字列になる
   // そのため、手動で '{' を結合する
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let rawText = decoded.output?.message?.content?.map((c: any) => c.text).join("") ?? "";
+  let rawText =
+    decoded.output?.message?.content?.map((c: { text?: string }) => c.text).join("") ?? "";
   rawText = "{" + rawText;
 
   // ★対策: それでもMarkdownが含まれていた場合の最終防壁

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * クリップボードへのコピー機能を提供するカスタムフック
@@ -6,42 +6,48 @@ import { useState } from "react";
  */
 export function useClipboard(resetDelay = 2000) {
   const [isCopied, setIsCopied] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // アンマウント時にタイマーをクリーンアップ
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   /**
    * テキストをクリップボードにコピーする
    * @param text コピーするテキスト
    * @returns コピー成功時はtrue、失敗時はfalse
    */
-  const copyToClipboard = async (text: string): Promise<boolean> => {
-    try {
-      // Clipboard APIが利用可能な場合
-      if (navigator.clipboard?.writeText) {
+  const copyToClipboard = useCallback(
+    async (text: string): Promise<boolean> => {
+      try {
         await navigator.clipboard.writeText(text);
-      } else {
-        // Fallback: 古いブラウザ向け
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
+
+        setIsCopied(true);
+
+        // 前回のタイマーがあればクリア
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+        }
+
+        // 指定時間後にコピー状態をリセット
+        timerRef.current = setTimeout(() => {
+          setIsCopied(false);
+          timerRef.current = null;
+        }, resetDelay);
+
+        return true;
+      } catch (error) {
+        console.error("Failed to copy to clipboard:", error);
+        return false;
       }
-
-      setIsCopied(true);
-
-      // 指定時間後にコピー状態をリセット
-      setTimeout(() => {
-        setIsCopied(false);
-      }, resetDelay);
-
-      return true;
-    } catch (error) {
-      console.error("Failed to copy to clipboard:", error);
-      return false;
-    }
-  };
+    },
+    [resetDelay]
+  );
 
   return { isCopied, copyToClipboard };
 }

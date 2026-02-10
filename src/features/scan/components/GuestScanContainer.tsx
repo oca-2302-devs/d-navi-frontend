@@ -2,9 +2,9 @@
 
 import { useGuestScanner } from "../hooks";
 
-import ScanLayout from "./ScanLayout";
+import { ScanLayout } from "./ScanLayout";
 
-export default function GuestScanContainer({ roomId }: { roomId: string }) {
+export function GuestScanContainer({ roomId }: { roomId: string }) {
   const { isScanning, handleGuestScan, handleGuestError } = useGuestScanner({
     goto: `/room/${roomId}/map`,
   });

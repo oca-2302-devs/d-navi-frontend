@@ -2,9 +2,9 @@
 
 import { useLocationScanner } from "../hooks";
 
-import ScanLayout from "./ScanLayout";
+import { ScanLayout } from "./ScanLayout";
 
-export default function LocationScanContainer() {
+export function LocationScanContainer() {
   const { isScanning, handleLocationScan, handleLocationError } = useLocationScanner();
 
   return (

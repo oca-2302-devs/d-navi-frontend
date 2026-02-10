@@ -2,9 +2,9 @@
 
 import { useHostScanner } from "../hooks";
 
-import ScanLayout from "./ScanLayout";
+import { ScanLayout } from "./ScanLayout";
 
-export default function HostScanContainer() {
+export function HostScanContainer() {
   const { isScanning, handleHostScan, handleHostError } = useHostScanner();
 
   return (

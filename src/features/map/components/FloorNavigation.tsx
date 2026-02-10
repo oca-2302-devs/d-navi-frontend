@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Layers } from "lucide-react";
@@ -38,7 +38,7 @@ const itemVariants = {
 };
 
 export function FloorNavigation({ currentLevel, onLevelChange, className }: FloorNavigationProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   // Floors 6 to 1 (descending for visual stack)
   const floors = FLOOR_NUMBERS;

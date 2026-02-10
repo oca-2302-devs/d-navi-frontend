@@ -22,7 +22,7 @@ export function CurrentLocationMarker({ x, y }: CurrentLocationMarkerProps) {
         fill="#3b82f6"
         opacity={0.3}
         animate={{
-          r: [15, 15, 15],
+          r: [15, 25, 15],
           opacity: [0.3, 0.1, 0.3],
         }}
         transition={{

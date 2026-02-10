@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { useMounted } from "@/shared/hooks";
+import { cn } from "@/shared/lib/utils";
 
 interface BaseStatusModalProps {
   open: boolean;
@@ -45,7 +46,7 @@ export function BaseStatusModal({
           <div className="flex-1 flex items-center justify-center w-full">
             <motion.div
               key="modal-content"
-              className={`p-8 flex flex-col items-center text-center ${className || ""}`}
+              className={cn("p-8 flex flex-col items-center text-center", className)}
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}

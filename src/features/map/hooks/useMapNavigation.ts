@@ -1,34 +1,47 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { MOCK_NODES, MOCK_EDGE_DATA } from "../constants";
+import { getRouteData } from "@/shared/lib/storage";
+
+import { useMapNodes } from "../api";
 import { getNextFloor } from "../lib/pathUtils";
+import { EdgeData, PathData } from "../types";
 
 export function useMapNavigation(showRoute: boolean = true) {
   const [currentLevel, setCurrentLevel] = useState<number>(1);
+  const [edgeData, setEdgeData] = useState<EdgeData | null>(null);
 
-  // デモ用、ホスト/ゲストパスの切り替えまたはパスなし
-  // サンプル通り、今はハードコード
-  const hostPath = MOCK_EDGE_DATA.host;
-  const guestPath = MOCK_EDGE_DATA.guest;
+  // DynamoDB からノードデータを取得
+  const { data: allNodes = [], isLoading } = useMapNodes();
+
+  // localStorage からルートデータを取得
+  useEffect(() => {
+    if (showRoute) {
+      const routeData = getRouteData();
+      setEdgeData(routeData);
+    }
+  }, [showRoute]);
+
+  const hostPath: PathData | undefined = edgeData?.host;
+  const guestPath: PathData | undefined = edgeData?.guest;
 
   // 現在のフロアのノードをフィルタリング
   const floorNodes = useMemo(() => {
-    return MOCK_NODES.filter((node) => node.floor === currentLevel);
-  }, [currentLevel]);
+    return allNodes.filter((node) => node.floor === currentLevel);
+  }, [allNodes, currentLevel]);
 
   // 次のフロアへの移動があるかチェック
   const nextFloor = useMemo(() => {
     if (!showRoute) return null;
 
     // ホストまたはゲストのパスから次のフロアを検索
-    const hostNext = getNextFloor(MOCK_NODES, currentLevel, hostPath);
+    const hostNext = getNextFloor(allNodes, currentLevel, hostPath);
     if (hostNext) return hostNext;
 
-    const guestNext = getNextFloor(MOCK_NODES, currentLevel, guestPath);
+    const guestNext = getNextFloor(allNodes, currentLevel, guestPath);
     return guestNext;
-  }, [currentLevel, showRoute, hostPath, guestPath]);
+  }, [allNodes, currentLevel, showRoute, hostPath, guestPath]);
 
   return {
     currentLevel,
@@ -37,5 +50,7 @@ export function useMapNavigation(showRoute: boolean = true) {
     nextFloor,
     hostPath,
     guestPath,
+    isLoading,
+    allNodes,
   };
 }

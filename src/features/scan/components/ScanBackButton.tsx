@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function ScanBackButton() {
+export function ScanBackButton() {
   const router = useRouter();
 
   return (

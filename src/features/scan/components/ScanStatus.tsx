@@ -6,7 +6,7 @@ interface ScanStatusProps {
   isScanning: boolean;
 }
 
-export default function ScanStatus({ isScanning }: ScanStatusProps) {
+export function ScanStatus({ isScanning }: ScanStatusProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}

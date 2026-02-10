@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import useScanner from "./useScanner";
+import { useScanner } from "./useScanner";
 import type { HandleError, HandleScan } from "./useScanner";
 
 export interface UseGuestScannerProps {
@@ -15,7 +15,7 @@ export interface UseGuestScannerReturn {
   handleGuestError: HandleError;
 }
 
-export default function useGuestScanner(options?: UseGuestScannerProps): UseGuestScannerReturn {
+export function useGuestScanner(options?: UseGuestScannerProps): UseGuestScannerReturn {
   const router = useRouter();
 
   const onSuccess = () => {

@@ -43,6 +43,7 @@ next-env.d.ts
 
 # amplify
 .amplify
-amplify/node_modules
+amplify/**/node_modules
 amplify_outputs*
 amplifyconfiguration*
+amplify/node_modules

@@ -5,4 +5,7 @@ export const STORAGE_KEYS = {
   ROOM: {
     HOST_TOKEN: "d-navi:room:host-token",
   },
+  ROUTE: {
+    DATA: "d-navi:route:data",
+  },
 } as const;
